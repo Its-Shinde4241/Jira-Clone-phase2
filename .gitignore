@@ -1,0 +1,19 @@
+# Ignore .vscode settings
+.vscode/
+
+# Ignore node_modules in all subdirectories
+**/node_modules/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore environment files
+**/.env
+.env
+
+# Ignore build outputs
+**/build/
+
+# Ignore npm debug logs
+npm-debug.log*
+**/npm-debug.log*

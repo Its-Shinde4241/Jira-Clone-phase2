@@ -13,8 +13,11 @@ import IssueCreate from './IssueCreate';
 import ProjectSettings from './ProjectSettings';
 import { ProjectPage } from './Styles';
 import { getProjectWithUsersAndIssues } from './LoadProject';
+import { useAuthGuard } from 'shared/hooks/useAuthGuard';
 
 const Project = () => {
+  useAuthGuard();
+
   const match = useRouteMatch();
   const history = useHistory();
 

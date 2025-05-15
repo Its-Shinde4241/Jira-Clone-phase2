@@ -8,7 +8,7 @@ const ProjectBoardHeader = () => (
   <Header>
     <BoardName>Kanban board</BoardName>
     <a
-      href="https://github.com/Its-Shinde4241/Jira_clone_phase2"
+      href="https://github.com/Its-Shinde4241/Jira-Clone-phase2"
       target="_blank"
       rel="noreferrer noopener"
     >

@@ -1,3 +1,8 @@
+
+# 📄 Quick Access Docs:
+[Architecture](ArchitecturalDecisions.md) | [Database Schema](deployment.md) | [RLS Policies](RLS_Policies.md)
+<br>
+
 # Project structure 🏗
 
 There are two special root folders in `src`: `App` and `shared` (described below). All other root folders in `src` (in our case only two: `Auth` and `Project`) should follow the structure of the routes. We can call these folders modules.

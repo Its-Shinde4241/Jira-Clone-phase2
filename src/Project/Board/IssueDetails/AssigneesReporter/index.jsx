@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Avatar, Select, Icon } from 'shared/components';
@@ -22,7 +22,7 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({
 }) => {
   const [Assignees, setAsignees] = useState([]);
 
-  const fetchAsignees = async () => {
+  const fetchAsignees = useCallback(async () => {
     const { data, error } = await supabase
       .from('issues')
       .select('user_ids')
@@ -31,10 +31,9 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({
     if (!data || error) {
       console.log('Error while fetching asignee in issue_detail component ', error);
     } else {
-      // console.log(data.user_ids);
       setAsignees(data?.user_ids);
     }
-  };
+  }, [issue.id]);
 
   useEffect(() => {
     fetchAsignees();
@@ -44,13 +43,13 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({
       .on(
         'postgres_changes',
         {
-          event: '*', // INSERT | DELETE | UPDATE
+          event: '*',
           schema: 'public',
           table: 'issues',
           filter: `id=eq.${issue.id}`,
         },
         () => {
-          fetchAsignees(); // Refresh the list on any change
+          fetchAsignees();
           fetchProject();
         },
       )

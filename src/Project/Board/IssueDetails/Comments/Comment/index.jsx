@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import toast from 'shared/utils/toast';
@@ -21,7 +21,7 @@ import {
 const propTypes = {
   comment: PropTypes.object.isRequired,
   fetchIssue: PropTypes.func.isRequired,
-  fetchIssueComments: PropTypes.array.isRequired,
+  fetchIssueComments: PropTypes.func.isRequired,
 };
 
 const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue, fetchIssueComments }) => {
@@ -30,27 +30,52 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue, fetchIssueCommen
   const [isUpdating, setUpdating] = useState(false);
   const [body, setBody] = useState(comment.body);
 
-  const fetchcommentOwner = async () => {
-    const userid = comment.userId;
-    const { data: Owner, error: UserFetchError } = await supabase
-      .from('users')
-      .select()
-      .eq('id', userid)
-      .single();
+  // const fetchcommentOwner = useCallback(async () => {
+  //   const userid = comment.userId;
+  //   const { data: Owner, error: UserFetchError } = await supabase
+  //     .from('users')
+  //     .select()
+  //     .eq('id', userid)
+  //     .single();
 
-    if (UserFetchError) {
-      console.log('Error in fetching comment owner', UserFetchError);
-      return;
-    }
+  //   if (UserFetchError) {
+  //     console.log('Error in fetching comment owner', UserFetchError);
+  //     return;
+  //   }
 
-    if (Owner) {
-      setCommentOwner(Owner);
-    }
-  };
+  //   if (Owner) {
+  //     setCommentOwner(Owner);
+  //   }
+  // }, [comment.userId]);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchcommentOwner = async () => {
+      const userid = comment.userId;
+      const { data: Owner, error: UserFetchError } = await supabase
+        .from('users')
+        .select()
+        .eq('id', userid)
+        .single();
+
+      if (UserFetchError) {
+        console.log('Error in fetching comment owner', UserFetchError);
+        return;
+      }
+
+      if (Owner && isMounted) {
+        setCommentOwner(Owner);
+      }
+    };
+
     fetchcommentOwner();
-  }, [comment, fetchcommentOwner]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [comment.userId]);
+
 
   if (!commentOwner) {
     console.log('error while finding comment owner');
@@ -102,8 +127,6 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue, fetchIssueCommen
                     .delete()
                     .eq('id', comment.id);
                   await fetchIssueComments();
-                  // await fetchIssue();
-                  modal.close();
                   toast.success('comment deleted successfully');
                 } catch (error) {
                   toast.error(error);

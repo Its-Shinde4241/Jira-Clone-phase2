@@ -17,23 +17,34 @@ const propTypes = {
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
   const match = useRouteMatch();
   const [IssueUsers, setIssueUsers] = useState([]);
-
-  const fetchIssueAndUser = async () => {
-    const { data, error } = await supabase
-      .from('issues')
-      .select('user_ids')
-      .eq('id', issue.id)
-      .single();
-    if (data) {
-      setIssueUsers(data?.user_ids);
-    }
-    if (error) {
-      console.log('error in fetching userids from issues.user_Ids', error);
-    }
-  };
+  
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchIssueAndUser = async () => {
+      const { data, error } = await supabase
+        .from('issues')
+        .select('user_ids')
+        .eq('id', issue.id)
+        .single();
+
+      if (isMounted) {
+        if (data) {
+          setIssueUsers(data?.user_ids);
+        }
+        if (error) {
+          console.log('error in fetching userids from issues.user_Ids', error);
+        }
+      }
+    };
+
     fetchIssueAndUser();
-  }, [fetchIssueAndUser, issue]);
+
+    return () => {
+      isMounted = false; // Cleanup: component is unmounting
+    };
+  }, [issue]);
+
 
   const assignees = IssueUsers.map(userID => projectUsers.find(user => user.id === userID));
 

@@ -56,6 +56,25 @@ const ProjectBoardIssueDetails = ({
   });
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchIssue = async () => {
+      const { data: issueData, error } = await supabase
+        .from('issues')
+        .select()
+        .eq('id', issueId)
+        .single();
+
+      if (!isMounted) return; // ⛔️ Skip if component is unmounted
+
+      if (error) {
+        setError(error);
+        console.log('Error in fetching particular issue from issue id', error);
+      } else {
+        setFetchedIssue(issueData);
+      }
+    };
+
     fetchIssue();
 
     const subscription = supabase
@@ -63,26 +82,27 @@ const ProjectBoardIssueDetails = ({
       .on(
         'postgres_changes',
         {
-          event: '*', // 'UPDATE', 'DELETE'
+          event: '*',
           schema: 'public',
           table: 'issues',
           filter: `id=eq.${issueId}`,
         },
         payload => {
           if (payload.eventType === 'DELETE') {
-            // If the issue is deleted, close the modal (or show a message)
             modalClose();
           } else {
-            fetchIssue(); // Refresh the issue
+            fetchIssue();
           }
         },
       )
       .subscribe();
 
     return () => {
+      isMounted = false;
       supabase.removeChannel(subscription);
     };
-  }, [fetchIssue, issueId, modalClose]);
+  }, [issueId, modalClose]);
+
 
   if (!FetchedIssue) return <Loader />;
   if (Error && Error.message) return <PageError />;

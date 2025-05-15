@@ -29,7 +29,7 @@ const ProjectBoardIssueDetailsComments = ({ issue, fetchIssue }) => {
     if (AllComments) {
       setIssueComments(AllComments);
     }
-  });
+  }, [issue.id]);
 
   useEffect(() => {
     fetchIssueComments();

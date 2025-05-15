@@ -20,8 +20,9 @@ const Authenticate = () => {
         } = await supabase.auth.getSession();
 
         if (session) {
+          console.log("hi")
           storeAuthToken(session.access_token);
-          history.push('/');
+          history.push('/project');
           return;
         }
 
@@ -60,7 +61,7 @@ const Authenticate = () => {
         } else {
           storeAuthToken(loginData.session.access_token);
         }
-        history.push('/');
+        history.push('/project');
       } catch (error) {
         toast.error(error.message || 'Authentication failed');
       }
@@ -69,7 +70,7 @@ const Authenticate = () => {
     if (!getStoredAuthToken()) {
       authenticateUser();
     } else {
-      history.push('/');
+      history.push('/project');
     }
   }, [history]);
 

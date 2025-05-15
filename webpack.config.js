@@ -51,5 +51,9 @@ module.exports = {
       favicon: path.join(__dirname, 'src/favicon.ico'),
     }),
     new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),
+      'process.env.SUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY),
+    }),
   ],
 };

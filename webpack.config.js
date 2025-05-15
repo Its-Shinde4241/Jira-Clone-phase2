@@ -48,7 +48,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html'),
-      favicon: path.join(__dirname, 'src/favicon.png'),
+      favicon: path.join(__dirname, 'src/favicon.ico'),
     }),
     new Dotenv(),
   ],

@@ -1,6 +1,6 @@
 
 # 📄 Quick Access Docs:
-[Architecture](ArchitecturalDecisions.md) | [Database Schema](deployment.md) | [RLS Policies](RLS_Policies.md)
+[Architecture](ARCHITECTURAL_DECISIONS.md) | [Database Schema](DATABASE_SCHEMA.md) | [RLS Policies](RLS_POLICIES.md)
 <br>
 
 # Project structure 🏗

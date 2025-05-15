@@ -21,9 +21,13 @@ The main rule to follow: **Files from one module can only import from ancestor f
 | `src/Project`    | Project module                                                                                                                                                                                       |
 | `src/shared`     | Components, constants, utils, hooks, styles etc. that can be used anywhere in the codebase. Any module is allowed to import from shared.                                                             |
 
-# Database Schema
-
 <br>
+
+# 🚀 Live Demo
+
+Check out the deployed project here:  
+🔗 **[Jira Clone – Live on Vercel](https://jiraclone-five.vercel.app/)**  
+
 
 # Deployment Instructions – Jira Clone Phase 2
 
